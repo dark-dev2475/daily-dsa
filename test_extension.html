@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LeetCode Auto Sync Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success-indicator {
+            color: green;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 LeetCode Auto Sync Extension Test</h1>
+    
+    <div class="test-section">
+        <h3>Test 1: Success Indicators</h3>
+        <p>This simulates a successful LeetCode submission:</p>
+        <div class="success-indicator" id="successIndicator">Accepted</div>
+        <button onclick="simulateSuccess()">Simulate Success</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 2: Server Connection</h3>
+        <p>Test if the local server is running:</p>
+        <button onclick="testServer()">Test Server</button>
+        <div id="serverStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 3: Extension Detection</h3>
+        <p>Check if the extension is loaded and working:</p>
+        <button onclick="testExtension()">Test Extension</button>
+        <div id="extensionStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Console Log</h3>
+        <div class="log" id="log"></div>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        function simulateSuccess() {
+            log('🎯 Simulating successful LeetCode submission...');
+            
+            // Create a success element
+            const successDiv = document.createElement('div');
+            successDiv.className = 'text-green-s';
+            successDiv.textContent = 'Accepted';
+            successDiv.id = 'simulatedSuccess';
+            
+            document.body.appendChild(successDiv);
+            log('✅ Success indicator added to page');
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                if (document.getElementById('simulatedSuccess')) {
+                    document.getElementById('simulatedSuccess').remove();
+                    log('🗑️ Success indicator removed');
+                }
+            }, 5000);
+        }
+
+        function testServer() {
+            log('🔌 Testing server connection...');
+            
+            fetch('http://localhost:3000/status', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                log('✅ Server is running');
+                log(`📊 Server status: ${JSON.stringify(data)}`);
+                document.getElementById('serverStatus').innerHTML = 
+                    '<span style="color: green;">✅ Server is running</span>';
+            })
+            .catch(error => {
+                log('❌ Server connection failed: ' + error.message);
+                document.getElementById('serverStatus').innerHTML = 
+                    '<span style="color: red;">❌ Server not running</span>';
+            });
+        }
+
+        function testExtension() {
+            log('🔍 Testing extension detection...');
+            
+            // Check if we're on a LeetCode-like page
+            if (window.location.href.includes('leetcode.com')) {
+                log('✅ On LeetCode domain');
+            } else {
+                log('⚠️ Not on LeetCode domain (this is expected for testing)');
+            }
+            
+            // Check if chrome.runtime is available
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                log('✅ Chrome extension API available');
+                document.getElementById('extensionStatus').innerHTML = 
+                    '<span style="color: green;">✅ Extension API available</span>';
+            } else {
+                log('❌ Chrome extension API not available');
+                document.getElementById('extensionStatus').innerHTML = 
+                    '<span style="color: red;">❌ Extension API not available</span>';
+            }
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            log('🚀 Test page loaded');
+            setTimeout(() => {
+                testServer();
+                testExtension();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 
